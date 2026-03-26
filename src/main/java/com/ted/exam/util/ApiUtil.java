@@ -22,7 +22,6 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
-import java.util.Properties;
 import javax.crypto.Cipher;
 
 /**
@@ -30,30 +29,11 @@ import javax.crypto.Cipher;
  */
 public class ApiUtil {
 
-    private static final String CONFIG_FILE = "config.properties";
-    private static String BASE_URL = "http://localhost:8000";
+    private static String BASE_URL = "http://172.16.1.7:8000";
     private static String authToken;
     private static final Gson GSON = new GsonBuilder().create();
 
     static {
-        loadFromConfig();
-    }
-
-    private static void loadFromConfig() {
-        java.io.File f = new java.io.File(CONFIG_FILE);
-        if (!f.exists()) {
-            return;
-        }
-        Properties props = new Properties();
-        try (FileInputStream in = new FileInputStream(f)) {
-            props.load(in);
-            String url = props.getProperty("apiUrl", "");
-            if (!url.isEmpty()) {
-                BASE_URL = url;
-            }
-        } catch (IOException e) {
-            System.err.println("加载 API 配置失败: " + e.getMessage());
-        }
     }
 
     public static void setBaseUrl(String url) {

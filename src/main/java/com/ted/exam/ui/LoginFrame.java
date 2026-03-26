@@ -18,7 +18,6 @@ import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Properties;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -55,13 +54,9 @@ public class LoginFrame extends JFrame {
     private JPanel rootContent;
     private boolean darkMode;
 
-    private static final String CONFIG_FILE = "config.properties";
-    private static final String KEY_ID_NUMBER = "idNumber";
-
     public LoginFrame() {
         initFrame();
         initComponents();
-        loadSavedId();
     }
 
     private void initFrame() {
@@ -540,7 +535,6 @@ public class LoginFrame extends JFrame {
                     LoginVO resp = get();
                     if (resp != null) {
                         LoginSession.get().login(resp);
-                        saveId(id);
                         Timer timer = new Timer(400, e -> openMainInterface());
                         timer.setRepeats(false);
                         timer.start();
@@ -719,41 +713,6 @@ public class LoginFrame extends JFrame {
         dispose();
         HomeFrame home = new HomeFrame();
         home.setVisible(true);
-    }
-
-    private void saveId(String id) {
-        try {
-            Properties props = new Properties();
-            File f = new File(CONFIG_FILE);
-            if (f.exists()) {
-                try (FileInputStream in = new FileInputStream(f)) {
-                    props.load(in);
-                }
-            }
-            props.setProperty(KEY_ID_NUMBER, id);
-            try (FileOutputStream out = new FileOutputStream(f)) {
-                props.store(out, "TED Exam Client");
-            }
-        } catch (IOException e) {
-            System.err.println("保存失败: " + e.getMessage());
-        }
-    }
-
-    private void loadSavedId() {
-        File f = new File(CONFIG_FILE);
-        if (!f.exists()) {
-            return;
-        }
-        try (FileInputStream in = new FileInputStream(f)) {
-            Properties props = new Properties();
-            props.load(in);
-            String id = props.getProperty(KEY_ID_NUMBER, "");
-            if (!id.isEmpty()) {
-                idNumberField.setText(id);
-            }
-        } catch (IOException e) {
-            System.err.println("加载失败: " + e.getMessage());
-        }
     }
 
     private class DecoratedBackgroundPanel extends JPanel {

@@ -473,7 +473,7 @@ public class HomeFrame extends JFrame {
                         + "2. 【重要须知】考试作答时，严禁刷新页面、切换屏幕，违规将影响考试成绩。\n\n"
                         + "3. 作答过程中请勿随意切换输入法或调整系统设置，防止页面卡顿。\n\n"
                         + "4. 考试过程中若遇网络中断，请立即联系监考老师，切勿自行重启设备。\n\n"
-                        + "5. 禁止使用任何辅助软件、工具书或通讯设备，一经发现按作弊处理。\n\n"
+                        + "5.禁止携带通讯工具、规定以外的电子用品或者与考试内容相关的资料进入座位，违反者按照违规违纪处理。\n\n"
                         + "6. 交卷后请确认系统提示\"提交成功\"，再离开考场。\n\n");
         styleAnnouncementText(caution);
         caution.setColumns(36);
@@ -1048,32 +1048,6 @@ public class HomeFrame extends JFrame {
         confirmDialog.setVisible(true);
     }
 
-    private void showRules() {
-        String rules = "考试须知\n\n" +
-                "1. 考试时间为 90 分钟，请合理安排答题时间。\n" +
-                "2. 考试期间请保持安静，遵守考场纪律。\n\n" +
-                "注意事项\n\n" +
-                "1. 考试系统出现异常请及时联系监考老师。\n\n" +
-                "2. 【重要须知】考试作答时，严禁刷新页面、切换屏幕，\n" +
-                "   违规将影响考试成绩。\n\n" +
-                "3. 作答过程中请勿随意切换输入法或调整系统设置，\n" +
-                "   防止页面卡顿。\n\n" +
-                "4. 考试过程中若遇网络中断，请立即联系监考老师，\n" +
-                "   切勿自行重启设备。\n\n" +
-                "5. 禁止使用任何辅助软件、工具书或通讯设备，\n" +
-                "   一经发现按作弊处理。\n\n" +
-                "6. 交卷后请确认系统提示\"提交成功\"，再离开考场。";
-        JTextArea ta = new JTextArea(rules);
-        ta.setFont(uiFontPlain(FS_LABEL + 1));
-        ta.setLineWrap(true);
-        ta.setWrapStyleWord(true);
-        ta.setEditable(false);
-        ta.setBackground(new Color(248, 250, 255));
-        ta.setBorder(BorderFactory.createEmptyBorder(12, 16, 12, 16));
-        JScrollPane scroll = new JScrollPane(ta);
-        scroll.setPreferredSize(new Dimension(480, 400));
-        JOptionPane.showMessageDialog(this, scroll, "考试规则", JOptionPane.INFORMATION_MESSAGE);
-    }
 
     private void doLogout() {
         int confirm = JOptionPane.showConfirmDialog(this,

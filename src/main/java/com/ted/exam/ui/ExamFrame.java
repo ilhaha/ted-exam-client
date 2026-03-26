@@ -74,6 +74,10 @@ public class ExamFrame extends JFrame {
     private JLabel unansweredStatLabel;
     private Timer examTimer;
     private int remainingSeconds;
+    private int focusLostCount = 0;
+    private static final int MAX_FOCUS_LOST = 3;
+    /** 正在显示自身弹窗时忽略焦点丢失 */
+    private volatile boolean showingInternalDialog = false;
 
     private JButton prevBtn;
     private JButton nextBtn;
@@ -113,6 +117,24 @@ public class ExamFrame extends JFrame {
             @Override
             public void windowClosing(WindowEvent e) {
                 confirmExit();
+            }
+        });
+
+        // 切屏检测（仅在 enableProctorWarning 为 true 时生效）
+        addWindowFocusListener(new WindowAdapter() {
+            @Override
+            public void windowLostFocus(WindowEvent e) {
+                if (showingInternalDialog) return;
+                ExamCandidateInfoVO exam = LoginSession.get().getExamInfo();
+                if (exam != null && Boolean.TRUE.equals(exam.getEnableProctorWarning())) {
+                    focusLostCount++;
+                    if (focusLostCount >= MAX_FOCUS_LOST) {
+                        examTimer.stop();
+                        autoSubmitOnCheating();
+                    } else {
+                        showFocusWarning(focusLostCount);
+                    }
+                }
             }
         });
     }
@@ -1011,6 +1033,7 @@ public class ExamFrame extends JFrame {
     }
 
     private void autoSubmitAfterDelay() {
+        showingInternalDialog = true;
         final JDialog dialog = new JDialog(this, "时间到", true);
         dialog.setLayout(new BorderLayout());
         dialog.setAlwaysOnTop(true);
@@ -1041,6 +1064,7 @@ public class ExamFrame extends JFrame {
             if (remaining[0] <= 0) {
                 ((Timer) e.getSource()).stop();
                 dialog.dispose();
+                showingInternalDialog = false;
                 submitExam();
             }
         };
@@ -1051,11 +1075,17 @@ public class ExamFrame extends JFrame {
             @Override
             public void windowClosing(WindowEvent e) {
                 countdown.stop();
+                showingInternalDialog = false;
                 submitExam();
             }
         });
 
-        dialog.setVisible(true);
+        try {
+            dialog.setVisible(true);
+        } catch (Exception e) {
+            showingInternalDialog = false;
+            throw e;
+        }
     }
 
     private void updateTimerDisplay() {
@@ -1069,13 +1099,72 @@ public class ExamFrame extends JFrame {
     }
 
     private void confirmExit() {
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "考试未提交，确定要退出吗？退出后成绩将无效！",
-                "确认退出", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-        if (confirm == JOptionPane.YES_OPTION) {
-            examTimer.stop();
-            dispose();
+        showingInternalDialog = true;
+        try {
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "考试未提交，确定要退出吗？退出后成绩将无效！",
+                    "确认退出", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (confirm == JOptionPane.YES_OPTION) {
+                examTimer.stop();
+                dispose();
+            }
+        } finally {
+            showingInternalDialog = false;
         }
+    }
+
+    private void showFocusWarning(int count) {
+        showingInternalDialog = true;
+        try {
+            int remaining = MAX_FOCUS_LOST - count;
+            JOptionPane.showMessageDialog(this,
+                    "检测到切屏！已记录 " + count + " 次，剩余 " + remaining + " 次将自动交卷。\n请保持考试窗口在屏幕最前端！",
+                    "切屏警告", JOptionPane.WARNING_MESSAGE);
+        } finally {
+            showingInternalDialog = false;
+        }
+    }
+
+    private void autoSubmitOnCheating() {
+        showingInternalDialog = true;
+        final JDialog dialog = new JDialog(this, "作弊检测", true);
+        dialog.setLayout(new BorderLayout());
+        dialog.setAlwaysOnTop(true);
+        dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+
+        JLabel msg = new JLabel("检测到切屏超过 3 次，系统将自动交卷！", SwingConstants.CENTER);
+        msg.setFont(uiFont(Font.BOLD, 16f));
+        msg.setBorder(new EmptyBorder(30, 40, 10, 40));
+
+        JLabel countLabel = new JLabel("3", SwingConstants.CENTER);
+        countLabel.setFont(uiFont(Font.BOLD, 48f));
+        countLabel.setForeground(TIMER_RED);
+        countLabel.setBorder(new EmptyBorder(10, 40, 30, 40));
+
+        JPanel center = new JPanel(new BorderLayout());
+        center.setOpaque(false);
+        center.add(msg, BorderLayout.NORTH);
+        center.add(countLabel, BorderLayout.CENTER);
+        dialog.add(center, BorderLayout.CENTER);
+
+        dialog.pack();
+        dialog.setLocationRelativeTo(this);
+
+        final int[] remaining = {3};
+        ActionListener countdownAction = e -> {
+            remaining[0]--;
+            countLabel.setText(String.valueOf(remaining[0]));
+            if (remaining[0] <= 0) {
+                ((Timer) e.getSource()).stop();
+                showingInternalDialog = false;
+                dialog.dispose();
+                submitExam();
+            }
+        };
+        Timer countdown = new Timer(1000, countdownAction);
+        countdown.start();
+
+        dialog.setVisible(true);
     }
 
     private void doSubmit() {
@@ -1087,26 +1176,31 @@ public class ExamFrame extends JFrame {
         boolean allAnswered = answered == total;
         boolean hasMarked = !markedIndices.isEmpty();
 
-        if (!allAnswered) {
-            int unanswered = total - answered;
-            JOptionPane.showMessageDialog(this,
-                    "还有 " + unanswered + " 道题未作答，请先完成所有题目！",
-                    "提示", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+        showingInternalDialog = true;
+        try {
+            if (!allAnswered) {
+                int unanswered = total - answered;
+                JOptionPane.showMessageDialog(this,
+                        "还有 " + unanswered + " 道题未作答，请先完成所有题目！",
+                        "提示", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
 
-        if (hasMarked) {
-            JOptionPane.showMessageDialog(this,
-                    "还有 " + markedIndices.size() + " 道题被标记，请先取消所有标记！",
-                    "提示", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+            if (hasMarked) {
+                JOptionPane.showMessageDialog(this,
+                        "还有 " + markedIndices.size() + " 道题被标记，请先取消所有标记！",
+                        "提示", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
 
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "您确定要交卷吗？交卷后无法修改答案。",
-                "确认交卷", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-        if (confirm == JOptionPane.YES_OPTION) {
-            submitExam();
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "您确定要交卷吗？交卷后无法修改答案。",
+                    "确认交卷", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (confirm == JOptionPane.YES_OPTION) {
+                submitExam();
+            }
+        } finally {
+            showingInternalDialog = false;
         }
     }
 

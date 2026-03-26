@@ -122,7 +122,6 @@ public class ExamEndFrame extends JFrame {
         card.add(Box.createVerticalStrut(20));
 
         boolean pass = totalScore <= 0 || (finalScore * 100.0 / totalScore) >= 70.0;
-        System.out.println("totalScore: " + totalScore + ", finalScore: " + finalScore + ", pass: " + pass);
         String passText = pass ? "及格" : "不及格";
         Color passColor = pass ? new Color(22, 163, 74) : SCORE_RED;
 
