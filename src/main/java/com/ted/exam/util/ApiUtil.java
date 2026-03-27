@@ -29,7 +29,9 @@ import javax.crypto.Cipher;
  */
 public class ApiUtil {
 
-    private static String BASE_URL = "http://172.16.1.7:8000";
+    private static String BASE_URL = "http://localhost:8000";
+//    private static String BASE_URL = "http://172.16.188.190:8000";
+//    private static String BASE_URL = "http://172.16.1.7:8000";
     private static String authToken;
     private static final Gson GSON = new GsonBuilder().create();
 
@@ -393,6 +395,13 @@ public class ApiUtil {
             System.err.println("获取试卷失败: " + e.getMessage());
         }
         return null;
+    }
+
+    /**
+     * 退出登录
+     */
+    public static void logout() {
+        doPost("/auth/logout", "{}");
     }
 
     /**

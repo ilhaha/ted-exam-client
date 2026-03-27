@@ -12,14 +12,17 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.geom.RoundRectangle2D;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.File;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
+import uk.co.caprica.vlcj.player.MediaPlayer;
+import uk.co.caprica.vlcj.player.MediaPlayerEventAdapter;
+import com.sun.jna.NativeLibrary;
 
 /**
  * 考试客户端首页（登录成功后展示）
@@ -69,32 +72,6 @@ public class HomeFrame extends JFrame {
 
     private static Font uiFontPlain(float sizePx) {
         return uiFont(Font.PLAIN, sizePx);
-    }
-
-    private JButton createGhostTextButton(String text, Runnable action) {
-        JButton b = new JButton(text) {
-            @Override
-            protected void paintComponent(Graphics g) {
-                if (getModel().isRollover() && getModel().isEnabled()) {
-                    Graphics2D g2 = (Graphics2D) g.create();
-                    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                    g2.setColor(new Color(241, 245, 249));
-                    g2.fillRoundRect(0, 0, getWidth(), getHeight(), 8, 8);
-                    g2.dispose();
-                }
-                super.paintComponent(g);
-            }
-        };
-        b.setFont(uiFontPlain(text.equals("退出") ? FS_LABEL + 3 : FS_LABEL));
-        b.setForeground(text.equals("退出") ? new Color(220, 38, 38) : TEXT_GRAY);
-        b.setContentAreaFilled(false);
-        b.setBorderPainted(false);
-        b.setFocusPainted(false);
-        b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        b.setBorder(BorderFactory.createEmptyBorder(6, 12, 6, 12));
-        b.setRolloverEnabled(true);
-        b.addActionListener(e -> action.run());
-        return b;
     }
 
     public HomeFrame() {
@@ -198,21 +175,12 @@ public class HomeFrame extends JFrame {
         clockLabel.setFont(uiFont(Font.PLAIN, FS_HINT));
         clockLabel.setForeground(TEXT_MUTED);
 
-        JButton logoutBtn = createGhostTextButton("退出", this::doLogout);
-
-        JPanel east = new JPanel();
-        east.setOpaque(false);
-        east.setLayout(new BoxLayout(east, BoxLayout.Y_AXIS));
-        east.add(logoutBtn);
-        east.add(Box.createVerticalStrut(6));
+        JPanel rightPad = new JPanel(new BorderLayout());
+        rightPad.setOpaque(false);
         JPanel clockRow = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         clockRow.setOpaque(false);
         clockRow.add(clockLabel);
-        east.add(clockRow);
-
-        JPanel rightPad = new JPanel(new BorderLayout());
-        rightPad.setOpaque(false);
-        rightPad.add(east, BorderLayout.EAST);
+        rightPad.add(clockRow, BorderLayout.EAST);
 
         JPanel leftPad = new JPanel();
         leftPad.setOpaque(false);
@@ -380,14 +348,14 @@ public class HomeFrame extends JFrame {
 
         int fieldGap = 14;
         // 个人信息：姓名、身份证号、准考证号
-        JPanel personalInfoGrid = new JPanel(new GridLayout(1, 3, fieldGap, fieldGap));
+        JPanel personalInfoGrid = new JPanel(new GridLayout(3, 1, fieldGap, fieldGap));
         personalInfoGrid.setOpaque(false);
         personalInfoGrid.add(makeFieldCard("考生姓名", nameValueLabel));
         personalInfoGrid.add(makeFieldCard("身份证号", idCardValueLabel));
         personalInfoGrid.add(makeFieldCard("准考证号", ticketValueLabel));
 
         // 考试信息：科目、考场、时间
-        JPanel examInfoGrid = new JPanel(new GridLayout(1, 3, fieldGap, fieldGap));
+        JPanel examInfoGrid = new JPanel(new GridLayout(3, 1, fieldGap, fieldGap));
         examInfoGrid.setOpaque(false);
         examInfoGrid.add(makeFieldCard("考试科目", subjectValueLabel));
         examInfoGrid.add(makeFieldCard("考试考场", venueValueLabel));
@@ -668,7 +636,7 @@ public class HomeFrame extends JFrame {
         ExamCandidateInfoVO exam = LoginSession.get().getExamInfo();
         String warningShortFilm = exam != null ? exam.getWarningShortFilm() : null;
         if (warningShortFilm != null && !warningShortFilm.isEmpty() && !shortFilmWatched) {
-            showWarningShortFilm(warningShortFilm);
+            SwingUtilities.invokeLater(() -> showWarningShortFilm(warningShortFilm));
         } else {
             showEnterExamConfirm();
         }
@@ -678,107 +646,7 @@ public class HomeFrame extends JFrame {
      * 弹出"确认开始考试"对话框，用户确认后加载试卷并进入考试
      */
     private void showEnterExamConfirm() {
-        JDialog confirmDialog = new JDialog(this, "确认开始考试", true);
-        confirmDialog.setSize(460, 300);
-        confirmDialog.setLocationRelativeTo(this);
-        confirmDialog.setLayout(new BorderLayout());
-        confirmDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-
-        JPanel content = new JPanel();
-        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
-        content.setBorder(new EmptyBorder(36, 44, 32, 44));
-        content.setBackground(PAGE_BG);
-
-        JLabel titleLabel = new JLabel("确认开始考试", SwingConstants.CENTER);
-        titleLabel.setFont(uiFont(Font.BOLD, FS_TITLE));
-        titleLabel.setForeground(TEXT_DARK);
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        content.add(titleLabel);
-        content.add(Box.createVerticalStrut(10));
-
-        JLabel warnLabel = new JLabel("您确认要开始考试吗？", SwingConstants.CENTER);
-        warnLabel.setFont(uiFont(Font.PLAIN, FS_HINT));
-        warnLabel.setForeground(TEXT_GRAY);
-        warnLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        content.add(warnLabel);
-        content.add(Box.createVerticalStrut(6));
-
-        JLabel hintLabel = new JLabel("开始后不可退出考试，否则成绩无效！", SwingConstants.CENTER);
-        hintLabel.setFont(uiFont(Font.BOLD, FS_HINT));
-        hintLabel.setForeground(new Color(220, 38, 38));
-        hintLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        content.add(hintLabel);
-        content.add(Box.createVerticalStrut(28));
-
-        JPanel btnRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
-        btnRow.setOpaque(false);
-
-        JButton cancelBtn = new JButton("取消") {
-            @Override
-            protected void paintComponent(Graphics g) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                Color bg = new Color(241, 245, 249);
-                if (getModel().isRollover() && getModel().isEnabled()) {
-                    bg = new Color(226, 232, 240);
-                }
-                g2.setColor(bg);
-                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 8, 8);
-                g2.dispose();
-                super.paintComponent(g);
-            }
-        };
-        cancelBtn.setFont(uiFont(Font.PLAIN, FS_VALUE));
-        cancelBtn.setForeground(TEXT_GRAY);
-        cancelBtn.setContentAreaFilled(false);
-        cancelBtn.setBorderPainted(false);
-        cancelBtn.setFocusPainted(false);
-        cancelBtn.setMargin(new Insets(12, 36, 12, 36));
-        cancelBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        cancelBtn.setRolloverEnabled(true);
-
-        JButton okBtn = new JButton("确认开始") {
-            @Override
-            protected void paintComponent(Graphics g) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                Color bg = new Color(220, 38, 38);
-                if (getModel().isRollover() && getModel().isEnabled()) {
-                    bg = new Color(185, 28, 28);
-                }
-                g2.setColor(bg);
-                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 8, 8);
-                g2.dispose();
-                super.paintComponent(g);
-            }
-        };
-        okBtn.setFont(uiFont(Font.BOLD, FS_VALUE));
-        okBtn.setForeground(Color.WHITE);
-        okBtn.setContentAreaFilled(false);
-        okBtn.setBorderPainted(false);
-        okBtn.setFocusPainted(false);
-        okBtn.setMargin(new Insets(12, 36, 12, 36));
-        okBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        okBtn.setRolloverEnabled(true);
-
-        btnRow.add(cancelBtn);
-        btnRow.add(okBtn);
-        content.add(btnRow);
-
-        confirmDialog.add(content, BorderLayout.CENTER);
-
-        cancelBtn.addActionListener(e -> confirmDialog.dispose());
-
-        okBtn.addActionListener(e -> {
-            confirmDialog.dispose();
-            loadPaperAndStartExam();
-        });
-
-        confirmDialog.getRootPane().registerKeyboardAction(
-                e -> {}, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-                JComponent.WHEN_IN_FOCUSED_WINDOW);
-
-        confirmDialog.setVisible(true);
+        loadPaperAndStartExam();
     }
 
     /**
@@ -850,219 +718,243 @@ public class HomeFrame extends JFrame {
         loading.setVisible(true);
     }
 
-    private void showWarningShortFilm(String videoUrl) {
-        String fullUrl = videoUrl.startsWith("http") ? videoUrl : ApiUtil.getBaseUrl() + videoUrl;
+    private static volatile boolean vlcInitialized = false;
+    //本地测试
+    // private static void initVlcPath() {
+    //     if (vlcInitialized) return;
+    //     synchronized (HomeFrame.class) {
+    //         if (vlcInitialized) return;
 
-        JDialog dialog = new JDialog(this, "观看警示短片", true);
-        dialog.setSize(480, 300);
+    //         String vlcPath = "E:\\software\\VLC64";
+    //         File vlcDir = new File(vlcPath);
+    //         if (vlcDir.exists()) {
+    //             File libvlc = new File(vlcDir, "libvlc.dll");
+    //             if (libvlc.exists()) {
+    //                 NativeLibrary.addSearchPath("libvlc", vlcPath);
+    //                 vlcInitialized = true;
+    //             }
+    //         }
+
+    //         String vlcHome = System.getenv("VLC_HOME");
+    //         if (vlcHome != null) {
+    //             File vlcHomeDir = new File(vlcHome);
+    //             if (vlcHomeDir.exists() && new File(vlcHomeDir, "libvlc.dll").exists()) {
+    //                 NativeLibrary.addSearchPath("libvlc", vlcHome);
+    //                 vlcInitialized = true;
+    //                 return;
+    //             }
+    //         }
+
+    //     }
+    // }
+
+// 打包
+private static void initVlcPath() {
+    if (vlcInitialized) return;
+
+    synchronized (HomeFrame.class) {
+        if (vlcInitialized) return;
+
+        // 获取程序当前目录
+        String basePath = new File("").getAbsolutePath();
+
+        // 拼接 vlc 目录（EXE 同级）
+        File vlcDir = new File(basePath, "vlc");
+
+        if (vlcDir.exists()) {
+            File libvlc = new File(vlcDir, "libvlc.dll");
+            if (libvlc.exists()) {
+
+                // 推荐方式（你这个也可以）
+                NativeLibrary.addSearchPath("libvlc", vlcDir.getAbsolutePath());
+
+                // 更保险（建议一起加）
+                System.setProperty("jna.library.path", vlcDir.getAbsolutePath());
+
+                vlcInitialized = true;
+                System.out.println("VLC加载成功：" + vlcDir.getAbsolutePath());
+                return;
+            }
+        }
+
+        System.err.println("未找到 VLC，本地视频播放不可用！");
+    }
+}
+
+    private void showWarningShortFilm(String videoUrl) {
+        initVlcPath();
+
+        JDialog dialog = new JDialog(this, "观看警示短片", false);
+        dialog.setSize(1100, 750);
         dialog.setLocationRelativeTo(this);
         dialog.setLayout(new BorderLayout());
         dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-
-        JPanel content = new JPanel(new BorderLayout(0, 0));
-        content.setBorder(new EmptyBorder(32, 40, 32, 40));
-        content.setBackground(PAGE_BG);
-
-        // JLabel iconLabel = new JLabel("▶", SwingConstants.CENTER);
-        // iconLabel.setFont(new Font("Arial", Font.PLAIN, 48));
-        // iconLabel.setForeground(PRIMARY_BLUE);
-        // iconLabel.setBorder(new EmptyBorder(0, 0, 16, 0));
-        // content.add(iconLabel, BorderLayout.NORTH);
-
-        JLabel titleLabel = new JLabel("正在准备播放警示短片...", SwingConstants.CENTER);
-        titleLabel.setFont(uiFont(Font.BOLD, FS_TITLE));
-        titleLabel.setForeground(TEXT_DARK);
-        titleLabel.setBorder(new EmptyBorder(0, 0, 8, 0));
-        content.add(titleLabel, BorderLayout.CENTER);
-
-        JLabel hintLabel = new JLabel("视频将在系统播放器中自动播放", SwingConstants.CENTER);
-        hintLabel.setFont(uiFont(Font.PLAIN, FS_HINT));
-        hintLabel.setForeground(TEXT_GRAY);
-        content.add(hintLabel, BorderLayout.SOUTH);
-
-        dialog.add(content, BorderLayout.CENTER);
-
-        new SwingWorker<Void, Void>() {
+        dialog.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
-            protected Void doInBackground() {
-                Path tmpFile;
-                try {
-                    URL url = new URL(fullUrl);
-                    String ext = getFileExtension(fullUrl);
-                    tmpFile = Files.createTempFile("ted_warn_", ext);
-                    try (InputStream in = url.openStream();
-                         OutputStream out = Files.newOutputStream(tmpFile)) {
-                        byte[] buf = new byte[8192];
-                        int len;
-                        while ((len = in.read(buf)) != -1) {
-                            out.write(buf, 0, len);
-                        }
-                    }
-                } catch (Exception ex) {
-                    System.err.println("下载视频失败: " + ex.getMessage());
-                    return null;
-                }
-
-                try {
-                    String pathStr = tmpFile.toAbsolutePath().toString();
-                    java.awt.Desktop.getDesktop().open(tmpFile.toFile());
-                } catch (Exception ex) {
-                    System.err.println("打开播放器失败: " + ex.getMessage());
-                }
-                return null;
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                // 播放期间禁止关闭
             }
+        });
 
-            @Override
-            protected void done() {
-                dialog.dispose();
-                SwingUtilities.invokeLater(() -> showWatchedConfirmation());
-            }
-        }.execute();
+        JPanel content = new JPanel(new BorderLayout());
+        content.setBorder(new EmptyBorder(16, 16, 16, 16));
+        content.setBackground(Color.BLACK);
 
-        dialog.setVisible(true);
-    }
+        EmbeddedMediaPlayerComponent mediaPlayerComponent = new EmbeddedMediaPlayerComponent();
+        content.add(mediaPlayerComponent, BorderLayout.CENTER);
 
-    private static String getFileExtension(String url) {
-        String path = url;
-        int q = path.indexOf('?');
-        if (q > 0) path = path.substring(0, q);
-        int i = path.lastIndexOf('.');
-        if (i >= 0) return path.substring(i);
-        return ".mp4";
-    }
+        JPanel controlPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 8));
+        controlPanel.setBackground(new Color(30, 30, 30));
 
-    private void showWatchedConfirmation() {
-        JDialog confirmDialog = new JDialog(this, "确认观看", true);
-        confirmDialog.setSize(440, 320);
-        confirmDialog.setLocationRelativeTo(this);
-        confirmDialog.setLayout(new BorderLayout());
+        final boolean[] videoEnded = {false};
 
-        JPanel content = new JPanel();
-        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
-        content.setBorder(new EmptyBorder(28, 40, 28, 40));
-        content.setBackground(PAGE_BG);
+        JLabel titleLabel = new JLabel("请完整观看警示短片，播放完毕后方可确认", SwingConstants.CENTER);
+        titleLabel.setFont(uiFont(Font.PLAIN, FS_HINT));
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setPreferredSize(new Dimension(400, 30));
+        controlPanel.add(titleLabel);
 
-        // JLabel iconLabel = new JLabel("▶", SwingConstants.CENTER);
-        // iconLabel.setFont(new Font("Arial", Font.PLAIN, 36));
-        // iconLabel.setForeground(PRIMARY_BLUE);
-        // iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        // iconLabel.setBorder(new EmptyBorder(0, 0, 12, 0));
-        // content.add(iconLabel);
-
-        JLabel titleLabel = new JLabel("请完整观看警示短片", SwingConstants.CENTER);
-        titleLabel.setFont(uiFont(Font.BOLD, FS_TITLE));
-        titleLabel.setForeground(TEXT_DARK);
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        content.add(titleLabel);
-        content.add(Box.createVerticalStrut(10));
-
-        JLabel countdownLabel = new JLabel("强制观看时间：剩余 3:00", SwingConstants.CENTER);
-        countdownLabel.setFont(uiFont(Font.PLAIN, FS_HINT));
-        countdownLabel.setForeground(TEXT_GRAY);
-        countdownLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        content.add(countdownLabel);
-        content.add(Box.createVerticalStrut(8));
-
-        JLabel hintLabel = new JLabel("请在播放器中播放完毕，倒计时结束后方可确认", SwingConstants.CENTER);
-        hintLabel.setFont(uiFont(Font.PLAIN, FS_HINT));
-        hintLabel.setForeground(TEXT_MUTED);
-        hintLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        content.add(hintLabel);
-        content.add(Box.createVerticalStrut(24));
-
-        JButton doneBtn = new JButton("已观看完毕") {
+        JButton closeBtn = new JButton("我已看完") {
             @Override
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                Color bgColor;
-                if (!isEnabled()) {
-                    bgColor = new Color(200, 200, 200);
+                Color bg;
+                if (videoEnded[0]) {
+                    bg = new Color(37, 99, 235); // 蓝色
+                    if (getModel().isRollover() && getModel().isEnabled()) {
+                        bg = new Color(29, 78, 216); // 深蓝色 hover
+                    }
                 } else {
-                    bgColor = PRIMARY_BLUE;
-                    if (getModel().isRollover()) {
-                        bgColor = PRIMARY_BLUE_HOVER;
+                    bg = new Color(60, 60, 60); // 灰色
+                    if (getModel().isRollover() && getModel().isEnabled()) {
+                        bg = new Color(80, 80, 80);
                     }
                 }
-                g2.setColor(bgColor);
-                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
+                g2.setColor(bg);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 6, 6);
                 g2.dispose();
                 super.paintComponent(g);
             }
         };
-        doneBtn.setFont(uiFont(Font.BOLD, FS_VALUE));
-        doneBtn.setForeground(TEXT_DARK);
-        doneBtn.setContentAreaFilled(false);
-        doneBtn.setBorderPainted(false);
-        doneBtn.setFocusPainted(false);
-        doneBtn.setMargin(new Insets(14, 48, 14, 48));
-        doneBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-        doneBtn.setEnabled(false);
+        closeBtn.setFont(uiFont(Font.PLAIN, FS_LABEL));
+        closeBtn.setForeground(Color.WHITE);
+        closeBtn.setContentAreaFilled(false);
+        closeBtn.setBorderPainted(false);
+        closeBtn.setFocusPainted(false);
+        closeBtn.setMargin(new Insets(8, 24, 8, 24));
+        closeBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        closeBtn.setRolloverEnabled(true);
+        closeBtn.setEnabled(false);
+        controlPanel.add(closeBtn);
 
-        final int totalSeconds = 180;
-        final int[] remainingSeconds = {totalSeconds};
-        Timer countdownTimer = new Timer(1000, null);
-        countdownTimer.addActionListener(e -> {
-            remainingSeconds[0]--;
-            if (remainingSeconds[0] <= 0) {
-                countdownTimer.stop();
-                countdownLabel.setText("观看时间已到，请点击确认");
-                countdownLabel.setForeground(new Color(34, 197, 94));
-                doneBtn.setEnabled(true);
-                doneBtn.setForeground(Color.WHITE);
-                doneBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-                doneBtn.repaint();
-            } else {
-                int min = remainingSeconds[0] / 60;
-                int sec = remainingSeconds[0] % 60;
-                countdownLabel.setText(String.format("强制观看时间：剩余 %d:%02d", min, sec));
+        content.add(controlPanel, BorderLayout.SOUTH);
+
+        dialog.add(content, BorderLayout.CENTER);
+
+        final AtomicBoolean playerReleased = new AtomicBoolean(false);
+
+        Runnable releasePlayer = () -> {
+            if (!playerReleased.compareAndSet(false, true)) {
+                return;
+            }
+            try {
+                MediaPlayer mp = mediaPlayerComponent.getMediaPlayer();
+                if (mp != null) {
+                    mp.stop();
+                    mp.release();
+                }
+            } catch (Exception ignored) {
+            }
+        };
+
+        mediaPlayerComponent.getMediaPlayer().addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
+            @Override
+            public void finished(MediaPlayer mediaPlayer) {
+                videoEnded[0] = true;
+                SwingUtilities.invokeLater(() -> {
+                    closeBtn.setEnabled(true);
+                    closeBtn.requestFocusInWindow();
+                });
+            }
+
+            @Override
+            public void error(MediaPlayer mediaPlayer) {
+                System.err.println("VLC 播放错误: " + videoUrl);
+                SwingUtilities.invokeLater(() -> {
+                    titleLabel.setText("视频播放失败，请联系监考老师");
+                    titleLabel.setForeground(new Color(255, 100, 100));
+                    closeBtn.setEnabled(true);
+                });
             }
         });
-        countdownTimer.start();
 
-        doneBtn.addActionListener(e -> {
-            countdownTimer.stop();
-            shortFilmWatched = true;
-            updateEnterButtonText();
-            confirmDialog.dispose();
+        closeBtn.addActionListener(e -> {
+            releasePlayer.run();
+            dialog.dispose();
+            SwingUtilities.invokeLater(() -> {
+                shortFilmWatched = true;
+                updateEnterButtonText();
+                loadPaperAndStartExam();
+            });
         });
 
-        content.add(doneBtn);
+        dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowOpened(java.awt.event.WindowEvent e) {
+                SwingUtilities.invokeLater(() -> {
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException ignored) {
+                    }
+                    String mediaPath = resolveVideoPath(videoUrl);
+                    if (mediaPath == null) {
+                        titleLabel.setText("视频路径无效或文件不存在");
+                        titleLabel.setForeground(new Color(255, 100, 100));
+                        closeBtn.setEnabled(true);
+                        return;
+                    }
+                    try {
+                        mediaPlayerComponent.getMediaPlayer().playMedia(mediaPath);
+                    } catch (Exception ex) {
+                        System.err.println("播放视频失败: " + ex.getMessage());
+                        titleLabel.setText("无法开始播放，请联系监考老师");
+                        titleLabel.setForeground(new Color(255, 100, 100));
+                        closeBtn.setEnabled(true);
+                    }
+                });
+            }
 
-        confirmDialog.add(content, BorderLayout.CENTER);
-        confirmDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-        // 屏蔽 ESC / 关闭按钮关闭
-        confirmDialog.getRootPane().registerKeyboardAction(
-                e -> {}, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-                JComponent.WHEN_IN_FOCUSED_WINDOW);
-        confirmDialog.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
-                // 禁止关闭，等待倒计时结束
+                // 播放期间禁止通过窗口按钮关闭
             }
+
             @Override
             public void windowClosed(java.awt.event.WindowEvent e) {
-                countdownTimer.stop();
+                releasePlayer.run();
             }
         });
-        confirmDialog.setVisible(true);
+
+        dialog.setVisible(true);
     }
 
-
-    private void doLogout() {
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "确定要退出登录吗？", "退出登录",
-                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-        if (confirm != JOptionPane.YES_OPTION) {
-            return;
+    private String resolveVideoPath(String videoUrl) {
+        if (videoUrl.startsWith("http://") || videoUrl.startsWith("https://")) {
+            return videoUrl;
+        } else if (videoUrl.matches("^[a-zA-Z]:[/\\\\].*") || videoUrl.startsWith("/")) {
+            File videoFile = new File(videoUrl);
+            if (videoFile.exists()) {
+                return videoFile.getAbsolutePath();
+            }
+            return null;
+        } else {
+            File videoFile = new File(videoUrl);
+            if (videoFile.exists()) {
+                return videoFile.getAbsolutePath();
+            }
+            return null;
         }
-
-        LoginSession.get().logout();
-        ApiUtil.clearAuthToken();
-
-        dispose();
-        LoginFrame login = new LoginFrame();
-        login.setVisible(true);
     }
 
     // region 内部组件

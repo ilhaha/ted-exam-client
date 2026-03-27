@@ -5,58 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2930fb52-8e56-4a85-a70e-6da6e42b2824" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/config.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/ted/exam/ui/ExamEndFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ted/exam/ui/ExamEndFrame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ted/exam/ui/ExamFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ted/exam/ui/ExamFrame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/ted/exam/ui/HomeFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ted/exam/ui/HomeFrame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ted/exam/ui/LoginFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ted/exam/ui/LoginFrame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/ted/exam/util/ApiUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ted/exam/util/ApiUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamEndFrame$RoundedCardPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamEndFrame$RoundedCardPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamEndFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamEndFrame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$10.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$10.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$4.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$5.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$6$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$6.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$7.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$8.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$8.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$9.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$9.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$ExamQuestionBodyPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$ExamQuestionBodyPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$ModernStemPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$ModernStemPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$OptionRowPanel$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$OptionRowPanel$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$OptionRowPanel$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$OptionRowPanel$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$OptionRowPanel$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$OptionRowPanel$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$OptionRowPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$OptionRowPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$ShadowWhitePanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$ShadowWhitePanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$SquarePhotoLabel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$SquarePhotoLabel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$LightGrayBackgroundPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$LightGrayBackgroundPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$MainShadowCardPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$MainShadowCardPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$SquareAvatarLabel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$SquareAvatarLabel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/LoginFrame$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/LoginFrame$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/LoginFrame$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/LoginFrame$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/LoginFrame$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/LoginFrame$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/LoginFrame$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/LoginFrame$4.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/LoginFrame$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/LoginFrame$5.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/LoginFrame$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/LoginFrame$6.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/LoginFrame$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/LoginFrame$7.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/LoginFrame$8.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/LoginFrame$8.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/LoginFrame$BlueCircleCheckBullet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/LoginFrame$BlueCircleCheckBullet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/LoginFrame$DecoratedBackgroundPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/LoginFrame$DecoratedBackgroundPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/LoginFrame$ShadowCardPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/LoginFrame$ShadowCardPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/LoginFrame$TabAccentBar.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/LoginFrame$TabAccentBar.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/LoginFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/LoginFrame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$4.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$5.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,6 +43,7 @@
   "keyToString": {
     "Application.Main.executor": "Run",
     "Maven.ted-exam-client [clean,package].executor": "Run",
+    "Maven.ted-exam-client [package].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
@@ -146,11 +99,24 @@
       <workItem from="1774231280861" duration="11266000" />
       <workItem from="1774252717578" duration="35852000" />
       <workItem from="1774406215104" duration="28810000" />
-      <workItem from="1774490903735" duration="4052000" />
+      <workItem from="1774490903735" duration="7327000" />
+      <workItem from="1774505135493" duration="17473000" />
+      <workItem from="1774593946239" duration="3900000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

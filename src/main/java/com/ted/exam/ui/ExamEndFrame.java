@@ -219,8 +219,12 @@ public class ExamEndFrame extends JFrame {
             redirectTimer.stop();
             redirectTimer = null;
         }
+
+        // 先调用退出登录接口，再清理本地会话
+        new Thread(() -> ApiUtil.logout()).start();
         LoginSession.get().logout();
         ApiUtil.clearAuthToken();
+
         dispose();
         SwingUtilities.invokeLater(() -> {
             LoginFrame login = new LoginFrame();
