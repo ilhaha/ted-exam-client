@@ -28,9 +28,14 @@ import javax.crypto.Cipher;
  * API 工具类
  */
 public class ApiUtil {
-
-    private static String BASE_URL = "http://localhost:8000";
+        private static String BASE_URL = "http://localhost:8000";
+//    阿里云
+//    private static String BASE_URL = "http://120.79.7.238:8000";
+//    定福庄内网
 //    private static String BASE_URL = "http://172.16.188.190:8000";
+//    定福庄外网
+//    private static String BASE_URL = "http://211.100.254.202:8000";
+//    考试中心
 //    private static String BASE_URL = "http://172.16.1.7:8000";
     private static String authToken;
     private static final Gson GSON = new GsonBuilder().create();

@@ -28,7 +28,7 @@ public class ExamEndFrame extends JFrame {
 
     private static final float FS_TITLE = 22f;
     private static final float FS_BODY = 15f;
-    private static final float FS_SCORE = 20f;
+    private static final float FS_SCORE = 26f;
     private static final float FS_COUNTDOWN = 14f;
 
     private javax.swing.Timer redirectTimer;

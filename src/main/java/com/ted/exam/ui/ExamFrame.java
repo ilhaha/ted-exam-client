@@ -47,7 +47,7 @@ public class ExamFrame extends JFrame {
 
     private static final float FS_PAGE_TITLE = 18f;
     private static final float FS_CARD_TITLE = 18f;
-    private static final float FS_BODY = 16f;
+    private static final float FS_BODY = 20f;
     private static final float FS_BTN = 14f;
     private static final float FS_SMALL = 12f;
 
