@@ -1324,12 +1324,28 @@ public class ExamFrame extends JFrame {
     }
 
     private void saveExamScoreLocally(UserInfoVO userInfo, int finalScore) {
+        String name = userInfo != null && userInfo.getNickname() != null ? userInfo.getNickname() : "";
+        String idCard = userInfo != null && userInfo.getUsername() != null ? userInfo.getUsername() : "";
+        String relativePath = "TEDExamClient" + File.separator + "exam-scores";
+
+        String userHome = System.getProperty("user.home");
+        File userDir = new File(userHome, relativePath);
+        if (writeExamScoreFile(userDir, name, idCard, finalScore)) {
+            return;
+        }
+
+        String tmpDir = System.getProperty("java.io.tmpdir");
+        File tempDir = new File(tmpDir, relativePath);
+        if (!writeExamScoreFile(tempDir, name, idCard, finalScore)) {
+            System.err.println("本地保存成绩失败：用户目录和临时目录均不可写");
+        }
+    }
+
+    private boolean writeExamScoreFile(File dir, String name, String idCard, int finalScore) {
         try {
-            String userHome = System.getProperty("user.home");
-            File dir = new File(userHome, "TEDExamClient" + File.separator + "exam-scores");
             if (!dir.exists() && !dir.mkdirs()) {
                 System.err.println("本地保存成绩失败：无法创建目录 " + dir.getAbsolutePath());
-                return;
+                return false;
             }
 
             String fileName = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".csv";
@@ -1340,8 +1356,6 @@ public class ExamFrame extends JFrame {
                 if (writeHeader) {
                     writer.write("考生姓名,身份证,分数\n");
                 }
-                String name = userInfo != null && userInfo.getNickname() != null ? userInfo.getNickname() : "";
-                String idCard = userInfo != null && userInfo.getUsername() != null ? userInfo.getUsername() : "";
                 writer.write(csvValue(name));
                 writer.write(",");
                 writer.write(csvValue(idCard));
@@ -1349,8 +1363,10 @@ public class ExamFrame extends JFrame {
                 writer.write(String.valueOf(finalScore));
                 writer.write("\n");
             }
+            return true;
         } catch (Exception e) {
             System.err.println("本地保存成绩失败：" + e.getMessage());
+            return false;
         }
     }
 
