@@ -5,21 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2930fb52-8e56-4a85-a70e-6da6e42b2824" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ted/exam/ui/ExamEndFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ted/exam/ui/ExamEndFrame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ted/exam/ui/ExamFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ted/exam/ui/ExamFrame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/ted/exam/util/ApiUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ted/exam/util/ApiUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamEndFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamEndFrame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$OptionRowPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$OptionRowPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$4.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$5.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/original-ted-exam-client-1.0.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-ted-exam-client-1.0.0.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/ted-exam-client-1.0.0-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/ted-exam-client-1.0.0-shaded.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/ted-exam-client-1.0.0.jar" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -126,6 +115,15 @@
       <workItem from="1778312214556" duration="844000" />
       <workItem from="1779157938062" duration="2635000" />
       <workItem from="1779238593321" duration="6963000" />
+      <workItem from="1779271088254" duration="34000" />
+      <workItem from="1779410920580" duration="437000" />
+      <workItem from="1779428739136" duration="679000" />
+      <workItem from="1779933827388" duration="1047000" />
+      <workItem from="1780316246157" duration="687000" />
+      <workItem from="1780363019913" duration="588000" />
+      <workItem from="1781485779906" duration="129000" />
+      <workItem from="1781489320553" duration="367000" />
+      <workItem from="1782176645975" duration="5838000" />
     </task>
     <servers />
   </component>
