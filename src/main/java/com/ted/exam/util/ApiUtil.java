@@ -28,9 +28,9 @@ import javax.crypto.Cipher;
  * API 工具类
  */
 public class ApiUtil {
-//        private static String BASE_URL = "http://192.168.1.178:8000";
-//    阿里云
-    private static String BASE_URL = "http://120.79.7.238:8000";
+    private static String BASE_URL = "http://localhost:8000";
+    //    阿里云
+//    private static String BASE_URL = "http://120.79.7.238:8000";
 //    定福庄内网
 //    private static String BASE_URL = "http://172.16.188.190:8000";
 //    定福庄外网
@@ -69,8 +69,8 @@ public class ApiUtil {
             URL url = new URL(BASE_URL + path);
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
-            conn.setConnectTimeout(8000);
-            conn.setReadTimeout(8000);
+            conn.setConnectTimeout(30000);
+            conn.setReadTimeout(30000);
             conn.setRequestProperty("Accept", "application/json");
             if (authToken != null) {
                 conn.setRequestProperty("Authorization", "Bearer " + authToken);
@@ -110,8 +110,8 @@ public class ApiUtil {
             URL url = new URL(urlWithParams.toString());
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
-            conn.setConnectTimeout(8000);
-            conn.setReadTimeout(8000);
+            conn.setConnectTimeout(30000);
+            conn.setReadTimeout(30000);
             conn.setRequestProperty("Accept", "application/json");
             if (authToken != null) {
                 conn.setRequestProperty("Authorization", "Bearer " + authToken);
@@ -146,8 +146,8 @@ public class ApiUtil {
             URL url = new URL(BASE_URL + path);
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
-            conn.setConnectTimeout(8000);
-            conn.setReadTimeout(8000);
+            conn.setConnectTimeout(30000);
+            conn.setReadTimeout(30000);
             conn.setRequestProperty("Content-Type", "application/json");
             conn.setRequestProperty("Accept", "application/json");
             if (authToken != null) {
@@ -281,6 +281,7 @@ public class ApiUtil {
 
     /**
      * 根据身份证号获取准考证列表
+     *
      * @param encryptedId 加密后的身份证号
      * @return 准考证选项列表，失败返回空列表
      * @throws RuntimeException 当接口返回错误时，异常信息为错误提示
@@ -294,7 +295,8 @@ public class ApiUtil {
 
         try {
             ApiResponse<List<ApiResponse.ExamNumberOption>> result =
-                    GSON.fromJson(resp, new TypeToken<ApiResponse<List<ApiResponse.ExamNumberOption>>>(){}.getType());
+                    GSON.fromJson(resp, new TypeToken<ApiResponse<List<ApiResponse.ExamNumberOption>>>() {
+                    }.getType());
 
             if (result == null) {
                 throw new RuntimeException("响应解析失败");
@@ -317,6 +319,7 @@ public class ApiUtil {
 
     /**
      * 获取当前用户信息
+     *
      * @return UserInfoVO，失败返回 null
      */
     public static UserInfoVO getUserInfo() {
@@ -326,7 +329,8 @@ public class ApiUtil {
         }
         try {
             ApiResponse<UserInfoVO> result = GSON.fromJson(resp,
-                    new TypeToken<ApiResponse<UserInfoVO>>() {}.getType());
+                    new TypeToken<ApiResponse<UserInfoVO>>() {
+                    }.getType());
             if (result != null && result.isOk()) {
                 return result.getData();
             }
@@ -338,6 +342,7 @@ public class ApiUtil {
 
     /**
      * 考试结束修改考试计划状态
+     *
      * @param id 考试计划ID
      */
     public static String endExam(int id) {
@@ -346,9 +351,10 @@ public class ApiUtil {
 
     /**
      * 提交登录
-     * @param encryptedId 加密后的身份证号
+     *
+     * @param encryptedId         加密后的身份证号
      * @param encryptedExamNumber 加密后的准考证号
-     * @param encryptedPassword 加密后的密码
+     * @param encryptedPassword   加密后的密码
      * @return 登录响应（调用方自行判断 result.isOk()）
      * @throws RuntimeException 网络或解析异常
      */
@@ -362,7 +368,8 @@ public class ApiUtil {
 
         try {
             ApiResponse<LoginVO> result = GSON.fromJson(resp,
-                    new TypeToken<ApiResponse<LoginVO>>() {}.getType());
+                    new TypeToken<ApiResponse<LoginVO>>() {
+                    }.getType());
             if (result == null) {
                 throw new RuntimeException("响应解析失败");
             }
@@ -381,6 +388,7 @@ public class ApiUtil {
 
     /**
      * 获取考试计划的题目
+     *
      * @param planId 考试计划ID
      * @param userId 用户ID
      * @return ExamPaperVO，失败返回 null
@@ -392,7 +400,8 @@ public class ApiUtil {
         }
         try {
             ApiResponse<ExamPaperVO> result = GSON.fromJson(resp,
-                    new TypeToken<ApiResponse<ExamPaperVO>>() {}.getType());
+                    new TypeToken<ApiResponse<ExamPaperVO>>() {
+                    }.getType());
             if (result != null && result.isOk()) {
                 return result.getData();
             }
@@ -411,6 +420,7 @@ public class ApiUtil {
 
     /**
      * 提交考试记录
+     *
      * @param req 考试记录请求
      * @return 是否提交成功
      */
@@ -424,7 +434,8 @@ public class ApiUtil {
 
         try {
             ApiResponse<Object> result = GSON.fromJson(resp,
-                    new TypeToken<ApiResponse<Object>>() {}.getType());
+                    new TypeToken<ApiResponse<Object>>() {
+                    }.getType());
             if (result == null) {
                 throw new RuntimeException("响应解析失败");
             }

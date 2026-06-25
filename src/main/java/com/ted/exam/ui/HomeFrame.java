@@ -40,8 +40,8 @@ public class HomeFrame extends JFrame {
     private static final Color BORDER_COLOR = new Color(226, 232, 240);
     private static final Color LINE_GRAY = new Color(226, 232, 240);
 
-    private static final int AVATAR_SIZE = 120;
-    private static final int BODY_MIN_HEIGHT = 460;
+    private static final int AVATAR_SIZE = 92;
+    private static final int BODY_MIN_HEIGHT = 360;
 
     private JPanel rootContent;
     private JLabel nameValueLabel;
@@ -113,7 +113,7 @@ public class HomeFrame extends JFrame {
         cw.weightx = 1;
         cw.weighty = 1;
         cw.fill = GridBagConstraints.BOTH;
-        cw.insets = new Insets(20, 40, 24, 40);
+        cw.insets = new Insets(10, 28, 12, 28);
         JPanel cardSlot = new JPanel(new GridBagLayout());
         cardSlot.setOpaque(false);
         GridBagConstraints slot = new GridBagConstraints();
@@ -139,17 +139,17 @@ public class HomeFrame extends JFrame {
         MainShadowCardPanel card = new MainShadowCardPanel();
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
         int s = MainShadowCardPanel.SHADOW;
-        card.setBorder(new EmptyBorder(s + 32, s + 40, s + 36, s + 40));
+        card.setBorder(new EmptyBorder(s + 22, s + 34, s + 24, s + 34));
 
         JComponent header = createCardHeader();
         header.setAlignmentX(Component.LEFT_ALIGNMENT);
         card.add(header);
-        card.add(Box.createVerticalStrut(28));
+        card.add(Box.createVerticalStrut(14));
 
         JComponent body = createTwoColumnBody();
         body.setAlignmentX(Component.LEFT_ALIGNMENT);
         card.add(body);
-        card.add(Box.createVerticalStrut(32));
+        card.add(Box.createVerticalStrut(12));
 
         JPanel footerRow = new JPanel(new BorderLayout());
         footerRow.setOpaque(false);
@@ -165,7 +165,7 @@ public class HomeFrame extends JFrame {
     private JComponent createCardHeader() {
         JPanel header = new JPanel(new GridBagLayout());
         header.setOpaque(false);
-        header.setBorder(new EmptyBorder(0, 0, 14, 0));
+        header.setBorder(new EmptyBorder(0, 0, 6, 0));
 
         JLabel pageTitle = new JLabel("确认信息并开始考试", SwingConstants.CENTER);
         pageTitle.setFont(uiFont(Font.BOLD, FS_TITLE));
@@ -254,12 +254,13 @@ public class HomeFrame extends JFrame {
         c.weightx = 0;
         c.fill = GridBagConstraints.VERTICAL;
         c.anchor = GridBagConstraints.CENTER;
-        c.insets = new Insets(12, 28, 12, 28);
+        c.insets = new Insets(8, 24, 8, 24);
         row.add(columnDivider(), c);
 
         c.gridx = 2;
         c.weightx = 0.56;
         c.fill = GridBagConstraints.HORIZONTAL;
+        c.anchor = GridBagConstraints.NORTHWEST;
         c.insets = new Insets(0, 0, 0, 0);
         row.add(createAnnouncementColumn(), c);
 
@@ -280,7 +281,7 @@ public class HomeFrame extends JFrame {
 
             @Override
             public Dimension getPreferredSize() {
-                return new Dimension(1, BODY_MIN_HEIGHT - 40);
+                return new Dimension(1, BODY_MIN_HEIGHT - 24);
             }
 
             @Override
@@ -329,7 +330,7 @@ public class HomeFrame extends JFrame {
             }
         };
         avatarLabel = new SquareAvatarLabel();
-        avatarLabel.setFont(uiFont(Font.BOLD, 40f));
+        avatarLabel.setFont(uiFont(Font.BOLD, 32f));
         avatarLabel.setForeground(PRIMARY_BLUE);
         avatarLabel.setHorizontalAlignment(SwingConstants.CENTER);
         avatarLabel.setText(getInitials());
@@ -346,7 +347,7 @@ public class HomeFrame extends JFrame {
         venueValueLabel    = new JLabel(exam != null ? nullToDash(exam.getClassroomName()) : "-");
         timeValueLabel     = new JLabel(exam != null ? nullToDash(exam.getExamTime()) : "-");
 
-        int fieldGap = 14;
+        int fieldGap = 6;
         // 个人信息：姓名、身份证号、准考证号
         JPanel personalInfoGrid = new JPanel(new GridLayout(3, 1, fieldGap, fieldGap));
         personalInfoGrid.setOpaque(false);
@@ -369,7 +370,7 @@ public class HomeFrame extends JFrame {
         rows.setOpaque(false);
         rows.setLayout(new BoxLayout(rows, BoxLayout.Y_AXIS));
         rows.add(avatarRow);
-        rows.add(Box.createVerticalStrut(16));
+        rows.add(Box.createVerticalStrut(8));
         rows.add(personalInfoGrid);
         rows.add(Box.createVerticalStrut(fieldGap));
         rows.add(examInfoGrid);
@@ -379,9 +380,9 @@ public class HomeFrame extends JFrame {
     }
 
     private JPanel makeFieldCard(String label, JLabel valueLabel) {
-        JPanel card = new JPanel(new BorderLayout(0, 6));
+        JPanel card = new JPanel(new BorderLayout(0, 3));
         card.setOpaque(false);
-        card.setBorder(new EmptyBorder(14, 12, 14, 12));
+        card.setBorder(new EmptyBorder(6, 10, 6, 10));
 
         JLabel lbl = new JLabel(label);
         lbl.setFont(uiFontPlain(FS_LABEL));
@@ -407,14 +408,14 @@ public class HomeFrame extends JFrame {
 
         // top.add(sectionTitle("考试公告"));
         top.add(sectionLine());
-        top.add(Box.createVerticalStrut(22));
+        top.add(Box.createVerticalStrut(10));
 
         JLabel sub1 = new JLabel("考试须知");
         sub1.setFont(uiFont(Font.BOLD, FS_VALUE + 3));
         sub1.setForeground(PRIMARY_BLUE);
         sub1.setAlignmentX(Component.LEFT_ALIGNMENT);
         top.add(sub1);
-        top.add(Box.createVerticalStrut(16));
+        top.add(Box.createVerticalStrut(8));
 
         ExamCandidateInfoVO exam = LoginSession.get().getExamInfo();
         String durationPart = exam != null && exam.getExamDuration() != null
@@ -422,30 +423,30 @@ public class HomeFrame extends JFrame {
                 : "90 分钟";
         JTextArea notice = new JTextArea(
                 "1. 考试时间为 " + durationPart + "，请合理安排答题时间。\n\n"
-                        + "2. 考试期间请保持安静，遵守考场纪律。\n\n" 
-                        + "3. 考试过程中若遇网络中断，请立即联系监考老师，切勿自行重启设备。\n\n");
+                        + "2. 考试期间请保持安静，遵守考场纪律。\n\n"
+                        + "3. 考试过程中若遇网络中断，请立即联系监考老师，切勿自行重启设备。");
         styleAnnouncementText(notice);
         notice.setColumns(36);
-        top.add(wrapAnnouncement(notice, 120, 160));
-        top.add(Box.createVerticalStrut(32));
+        top.add(notice);
+        top.add(Box.createVerticalStrut(12));
 
         JLabel sub2 = new JLabel("注意事项");
         sub2.setFont(uiFont(Font.BOLD, FS_VALUE + 3));
         sub2.setForeground(PRIMARY_BLUE);
         sub2.setAlignmentX(Component.LEFT_ALIGNMENT);
         top.add(sub2);
-        top.add(Box.createVerticalStrut(16));
+        top.add(Box.createVerticalStrut(8));
 
         JTextArea caution = new JTextArea(
                 "1. 考试系统出现异常请及时联系监考老师。\n\n"
                         + "2. 【重要须知】考试作答时，严禁刷新页面、切换屏幕，违规将影响考试成绩。\n\n"
                         + "3. 作答过程中请勿随意切换输入法或调整系统设置，防止页面卡顿。\n\n"
                         + "4. 考试过程中若遇网络中断，请立即联系监考老师，切勿自行重启设备。\n\n"
-                        + "5.禁止携带通讯工具、规定以外的电子用品或者与考试内容相关的资料进入座位，违反者按照违规违纪处理。\n\n"
-                        + "6. 交卷后请确认系统提示\"提交成功\"，再离开考场。\n\n");
+                        + "5. 禁止携带通讯工具、规定以外的电子用品或者与考试内容相关的资料进入座位，违反者按照违规违纪处理。\n\n"
+                        + "6. 交卷后请确认系统提示\"提交成功\"，再离开考场。");
         styleAnnouncementText(caution);
         caution.setColumns(36);
-        top.add(wrapAnnouncement(caution, 300, 450));
+        top.add(caution);
 
         col.add(top, BorderLayout.NORTH);
 
@@ -461,23 +462,9 @@ public class HomeFrame extends JFrame {
         ta.setOpaque(false);
         ta.setBorder(null);
         ta.setRows(0);
-        ta.setMargin(new Insets(8, 0, 16, 0));
-    }
-
-    private static JScrollPane wrapAnnouncement(JTextArea ta, int minHeight, int maxHeight) {
-        JScrollPane sp = new JScrollPane(ta);
-        sp.setBorder(null);
-        sp.setOpaque(false);
-        sp.getViewport().setOpaque(false);
-        sp.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        sp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-        sp.setAlignmentX(Component.LEFT_ALIGNMENT);
-        Dimension pref = ta.getPreferredSize();
-        int h = Math.min(pref.height + 12, maxHeight);
-        h = Math.max(h, minHeight);
-        sp.setPreferredSize(new Dimension(pref.width + 4, h));
-        sp.setMaximumSize(new Dimension(Integer.MAX_VALUE, h));
-        return sp;
+        ta.setMargin(new Insets(4, 0, 8, 0));
+        ta.setAlignmentX(Component.LEFT_ALIGNMENT);
+        ta.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
     }
 
     private JLabel sectionTitle(String text) {
@@ -492,8 +479,8 @@ public class HomeFrame extends JFrame {
         JPanel line = new JPanel();
         line.setOpaque(false);
         line.setLayout(new BorderLayout());
-        line.setBorder(new EmptyBorder(10, 0, 0, 0));
-        line.setMaximumSize(new Dimension(Integer.MAX_VALUE, 9));
+        line.setBorder(new EmptyBorder(6, 0, 0, 0));
+        line.setMaximumSize(new Dimension(Integer.MAX_VALUE, 6));
         line.setAlignmentX(Component.LEFT_ALIGNMENT);
         JSeparator sep = new JSeparator();
         sep.setForeground(LINE_GRAY);
@@ -505,7 +492,7 @@ public class HomeFrame extends JFrame {
     private JComponent createCardFooter() {
         JPanel footer = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         footer.setOpaque(false);
-        footer.setBorder(new EmptyBorder(16, 0, 0, 0));
+        footer.setBorder(new EmptyBorder(6, 0, 0, 0));
         footer.add(createOutlineEnterButton());
         return footer;
     }
@@ -546,7 +533,7 @@ public class HomeFrame extends JFrame {
         enterExamBtn.setFocusPainted(false);
         enterExamBtn.setForeground(PRIMARY_BLUE);
         enterExamBtn.setFont(uiFont(Font.BOLD, FS_BTN));
-        enterExamBtn.setMargin(new Insets(16, 72, 16, 72));
+        enterExamBtn.setMargin(new Insets(12, 64, 12, 64));
         enterExamBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         enterExamBtn.setRolloverEnabled(true);
         updateEnterButtonText();

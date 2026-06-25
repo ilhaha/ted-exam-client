@@ -31,6 +31,9 @@ public class QuestionBankWithOptionVO implements Serializable {
     @SerializedName("questionType")
     private Integer questionType;
 
+    @SerializedName("points")
+    private Integer points;
+
     @SerializedName("options")
     private List<OptionVO> options;
 
@@ -60,6 +63,14 @@ public class QuestionBankWithOptionVO implements Serializable {
 
     public Integer getQuestionType() {
         return questionType;
+    }
+
+    public Integer getPoints() {
+        return points;
+    }
+
+    public int getPointsOrDefault() {
+        return points != null ? points : 1;
     }
 
     public List<OptionVO> getOptions() {

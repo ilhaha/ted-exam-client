@@ -5,10 +5,51 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2930fb52-8e56-4a85-a70e-6da6e42b2824" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ted/exam/model/resp/QuestionBankWithOptionVO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ted/exam/model/resp/QuestionBankWithOptionVO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ted/exam/ui/ExamFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ted/exam/ui/ExamFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ted/exam/ui/HomeFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ted/exam/ui/HomeFrame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/ted/exam/util/ApiUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ted/exam/util/ApiUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$10.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$10.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$11.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$11.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$5.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$6.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$7$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$7.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$8.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$8.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$9.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$9.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$ExamQuestionBodyPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$ExamQuestionBodyPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$ModernStemPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$ModernStemPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$OptionRowPanel$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$OptionRowPanel$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$OptionRowPanel$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$OptionRowPanel$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$OptionRowPanel$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$OptionRowPanel$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$OptionRowPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$OptionRowPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$ShadowWhitePanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$ShadowWhitePanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$SquarePhotoLabel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame$SquarePhotoLabel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/ExamFrame.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$10.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$10.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$5.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$6.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$7.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$8.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$8.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$9.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$9.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$LightGrayBackgroundPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$LightGrayBackgroundPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$MainShadowCardPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$MainShadowCardPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$SquareAvatarLabel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame$SquareAvatarLabel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/ui/HomeFrame.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil$5.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ted/exam/util/ApiUtil.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/original-ted-exam-client-1.0.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-ted-exam-client-1.0.0.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/ted-exam-client-1.0.0-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/ted-exam-client-1.0.0-shaded.jar" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,10 +62,10 @@
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
-        <option name="customMavenHome" value="E:\software\apache-maven-3.9.9" />
-        <option name="localRepository" value="E:\software\apache-maven-3.9.9\mvn-repo" />
+        <option name="customMavenHome" value="$USER_HOME$/Library/apache-maven-3.9.8" />
+        <option name="localRepository" value="$USER_HOME$/Library/apache-maven-3.9.8" />
         <option name="mavenHomeTypeForPersistence" value="CUSTOM" />
-        <option name="userSettingsFile" value="E:\software\apache-maven-3.9.9\conf\settings.xml" />
+        <option name="userSettingsFile" value="$USER_HOME$/Library/apache-maven-3.9.8/conf/settings.xml" />
       </MavenGeneralSettings>
     </option>
   </component>
@@ -39,27 +80,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.ted-exam-client [clean,package].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.ted-exam-client [package].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/work/ted/ted-exam-client&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;MavenSettings&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "Maven.ted-exam-client [clean,package].executor": "Run",
+    "Maven.ted-exam-client [package].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/ilhaha/Documents/work/ted-exam-client",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "MavenSettings",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.ted.exam.Main" />
@@ -83,8 +125,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-b114ca120d71-intellij.indexing.shared.core-IU-242.21829.142" />
-        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-IU-242.21829.142" />
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.23774.435" />
+        <option value="bundled-js-predefined-d6986cc7102b-f27c65a3e318-JavaScript-IU-251.23774.435" />
       </set>
     </attachedChunks>
   </component>
@@ -115,15 +157,7 @@
       <workItem from="1778312214556" duration="844000" />
       <workItem from="1779157938062" duration="2635000" />
       <workItem from="1779238593321" duration="6963000" />
-      <workItem from="1779271088254" duration="34000" />
-      <workItem from="1779410920580" duration="437000" />
-      <workItem from="1779428739136" duration="679000" />
-      <workItem from="1779933827388" duration="1047000" />
-      <workItem from="1780316246157" duration="687000" />
-      <workItem from="1780363019913" duration="588000" />
-      <workItem from="1781485779906" duration="129000" />
-      <workItem from="1781489320553" duration="367000" />
-      <workItem from="1782176645975" duration="5838000" />
+      <workItem from="1782348203371" duration="6351000" />
     </task>
     <servers />
   </component>

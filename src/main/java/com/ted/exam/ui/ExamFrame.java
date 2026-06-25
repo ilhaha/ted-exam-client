@@ -13,10 +13,15 @@ import com.google.gson.Gson;
 import javax.swing.*;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
@@ -74,6 +79,7 @@ public class ExamFrame extends JFrame {
     private JLabel unansweredStatLabel;
     private Timer examTimer;
     private int remainingSeconds;
+    private boolean submitting = false;
     private int focusLostCount = 0;
     private static final int MAX_FOCUS_LOST = 3;
     /** 正在显示自身弹窗时忽略焦点丢失 */
@@ -88,8 +94,8 @@ public class ExamFrame extends JFrame {
     private JLabel photoLabel;
     private int gridCols = 10;
     private int navGap = 5;
-    private Dimension navCellSize = new Dimension(26, 26);
-    private static final int PHOTO_SIZE = 120;
+    private Dimension navCellSize = new Dimension(34, 26);
+    private static final int PHOTO_SIZE = 64;
 
     public ExamFrame(ExamPaperVO paper) {
         this.paper = paper;
@@ -244,75 +250,83 @@ public class ExamFrame extends JFrame {
         wrap.setOpaque(false);
         wrap.setBorder(new EmptyBorder(8, 12, 12, 12));
 
-        JComponent infoSidebar = buildInfoSidebar();
         JComponent left = buildQuestionCard();
         JComponent right = buildAnswerSidebar();
 
+        final double mainRatio = 0.70;
         JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, left, right);
         split.setDividerSize(8);
         split.setBorder(null);
         split.setContinuousLayout(true);
-        split.setResizeWeight(0.65); // 左 65% / 右 35%
+        split.setResizeWeight(mainRatio); // 左 70% / 右 30%
         split.setBackground(PAGE_BG);
-        // 确保首次显示时按 65/35 落位（否则默认 divider 可能偏移）
+        left.setMinimumSize(new Dimension(0, 0));
+        right.setMinimumSize(new Dimension(300, 0));
+        // 确保首次显示时按 70/30 落位（否则默认 divider 可能偏移）
         split.addHierarchyListener(e -> {
             if ((e.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) != 0 && split.isShowing()) {
-                int w = split.getWidth();
-                if (w > 0) split.setDividerLocation((int) (w * 0.65));
+                SwingUtilities.invokeLater(() -> applyMainSplitRatio(split, mainRatio));
+            }
+        });
+        split.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                applyMainSplitRatio(split, mainRatio);
             }
         });
 
-        wrap.add(infoSidebar, BorderLayout.WEST);
+        wrap.add(buildInfoBar(), BorderLayout.NORTH);
         wrap.add(split, BorderLayout.CENTER);
         return wrap;
     }
 
-    /** 左侧个人信息栏 */
-    private JComponent buildInfoSidebar() {
-        JPanel side = new JPanel(new BorderLayout());
-        side.setBackground(CARD_INNER_BG);
-        side.setBorder(BorderFactory.createCompoundBorder(
+    /** 顶部个人信息栏 */
+    private JComponent buildInfoBar() {
+        JPanel bar = new JPanel(new BorderLayout(18, 0));
+        bar.setBackground(CARD_INNER_BG);
+        bar.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(226, 232, 240), 1),
-                new EmptyBorder(16, 14, 16, 14)));
-        side.setPreferredSize(new Dimension(240, 0));
-        side.setMaximumSize(new Dimension(260, Integer.MAX_VALUE));
+                new EmptyBorder(8, 18, 8, 18)));
 
-        // 整块置顶：避免 CENTER + BoxLayout 纵向拉伸把信息挤到底部
-        JPanel column = new JPanel();
-        column.setOpaque(false);
-        column.setLayout(new BoxLayout(column, BoxLayout.Y_AXIS));
+        JPanel left = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 0));
+        left.setOpaque(false);
 
-        JLabel title = new JLabel("考生信息", SwingConstants.CENTER);
-        title.setFont(uiFont(Font.BOLD, FS_BTN));
-        title.setForeground(TEXT_DARK);
-        title.setAlignmentX(Component.CENTER_ALIGNMENT);
-        title.setBorder(new EmptyBorder(0, 0, 14, 0));
-        column.add(title);
+        left.add(buildPhotoPanel());
+        bar.add(left, BorderLayout.WEST);
 
-        JPanel photoPanel = buildPhotoPanel();
-        photoPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        column.add(photoPanel);
-        column.add(Box.createVerticalStrut(14));
+        JPanel row = new JPanel(new GridLayout(1, 4, 18, 0));
+        row.setOpaque(false);
 
         LoginSession s = LoginSession.get();
         UserInfoVO user = s.getUserInfo();
+        row.add(infoField("考生姓名", nvl(user != null ? user.getNickname() : null, "—")));
+        row.add(infoField("身份证号", nvl(user != null ? user.getUsername() : null, "—")));
+        row.add(infoField("准考证号", nvl(s.getExamNumber(), "—")));
+        row.add(infoField("考场名称", nvl(s.getClassroomName(), "—")));
 
-        addInfoRowToColumn(column, "考生姓名", nvl(user != null ? user.getNickname() : null, "—"));
-        column.add(Box.createVerticalStrut(10));
-        addInfoRowToColumn(column, "身份证号", nvl(user != null ? user.getUsername() : null, "—"));
-        column.add(Box.createVerticalStrut(10));
-        addInfoRowToColumn(column, "准考证号", nvl(s.getExamNumber(), "—"));
-        column.add(Box.createVerticalStrut(10));
-        addInfoRowToColumn(column, "考场名称", nvl(s.getClassroomName(), "—"));
-
-        side.add(column, BorderLayout.NORTH);
-        return side;
+        bar.add(row, BorderLayout.CENTER);
+        return bar;
     }
 
-    private void addInfoRowToColumn(JPanel column, String label, String value) {
-        JPanel row = infoRow(label, value);
-        row.setAlignmentX(Component.CENTER_ALIGNMENT);
-        column.add(row);
+    private void applyMainSplitRatio(JSplitPane split, double ratio) {
+        int w = split.getWidth();
+        if (w > 0) {
+            split.setDividerLocation((int) (w * ratio));
+        }
+    }
+
+    private JPanel infoField(String label, String value) {
+        JPanel field = new JPanel(new BorderLayout(0, 4));
+        field.setOpaque(false);
+        JLabel l = new JLabel(label);
+        l.setFont(uiFontPlain(FS_SMALL));
+        l.setForeground(TEXT_MUTED);
+        JLabel v = new JLabel(value);
+        v.setFont(uiFont(Font.BOLD, FS_BTN));
+        v.setForeground(TEXT_DARK);
+        field.add(l, BorderLayout.NORTH);
+        field.add(v, BorderLayout.CENTER);
+        return field;
     }
 
     private static String nvl(String s, String def) {
@@ -447,28 +461,6 @@ public class ExamFrame extends JFrame {
         public Dimension getMaximumSize() {
             return getPreferredSize();
         }
-    }
-
-    /** 单行信息标签 */
-    private JPanel infoRow(String label, String value) {
-        JPanel row = new JPanel(new BorderLayout(6, 0));
-        row.setOpaque(false);
-        row.setAlignmentX(Component.LEFT_ALIGNMENT);
-        row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 24));
-
-        JLabel l = new JLabel(label);
-        l.setFont(uiFontPlain(FS_SMALL));
-        l.setForeground(TEXT_MUTED);
-        l.setPreferredSize(new Dimension(56, 20));
-
-        JLabel v = new JLabel(value);
-        v.setFont(uiFont(Font.PLAIN, FS_SMALL));
-        v.setForeground(TEXT_DARK);
-        v.setBorder(new EmptyBorder(0, 0, 0, 0));
-
-        row.add(l, BorderLayout.WEST);
-        row.add(v, BorderLayout.CENTER);
-        return row;
     }
 
     /** 中间白色答题卡（圆角阴影） */
@@ -785,7 +777,7 @@ public class ExamFrame extends JFrame {
         for (int i = 0; i < questions.size(); i++) {
             final int navIndex = i;
             final QuestionBankWithOptionVO q = questions.get(i);
-            JButton btn = new JButton(String.valueOf(i + 1)) {
+            JButton btn = new JButton() {
                 @Override
                 protected void paintComponent(Graphics g) {
                     Graphics2D g2 = (Graphics2D) g.create();
@@ -819,22 +811,22 @@ public class ExamFrame extends JFrame {
                         g2.setStroke(new BasicStroke(1f));
                         g2.drawRoundRect(0, 0, w - 2, h - 2, r, r);
                     }
+                    Color textColor = current ? PRIMARY_BLUE : (answered ? Color.WHITE : TEXT_DARK);
+                    g2.setColor(textColor);
+                    g2.setFont(getFont());
+                    String text = String.valueOf(navIndex + 1);
+                    FontMetrics fm = g2.getFontMetrics();
+                    int tx = (w - fm.stringWidth(text)) / 2;
+                    int ty = (h - fm.getHeight()) / 2 + fm.getAscent();
+                    g2.drawString(text, tx, ty);
                     g2.dispose();
-                    super.paintComponent(g);
                 }
             };
-            btn.setFont(uiFontPlain(FS_SMALL));
-            if (navIndex == currentIndex) {
-                btn.setForeground(PRIMARY_BLUE);
-            } else if (isQuestionAnswered(q)) {
-                btn.setForeground(Color.WHITE);
-            } else {
-                btn.setForeground(TEXT_DARK);
-            }
+            btn.setFont(uiFont(Font.BOLD, FS_SMALL));
             btn.setContentAreaFilled(false);
             btn.setBorderPainted(false);
             btn.setFocusPainted(false);
-            btn.setMargin(new Insets(3, 1, 3, 1));
+            btn.setMargin(new Insets(0, 0, 0, 0));
             btn.setPreferredSize(navCellSize);
             btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             final int idx = i;
@@ -1205,10 +1197,15 @@ public class ExamFrame extends JFrame {
     }
 
     private void submitExam() {
-        examTimer.stop();
+        if (submitting) return;
+        submitting = true;
+        showingInternalDialog = true;
+        if (examTimer != null) {
+            examTimer.stop();
+        }
 
         int finalScore = calculateSubmitScore();
-        int totalScore = questions.size();
+        int totalScore = 100;
 
         LoginSession session = LoginSession.get();
         ExamCandidateInfoVO examInfo = session.getExamInfo();
@@ -1217,68 +1214,154 @@ public class ExamFrame extends JFrame {
         Long planId = examInfo != null ? examInfo.getPlanId() : null;
         Long candidateId = userInfo != null ? userInfo.getId() : null;
 
-        String infoHint = (planId == null || candidateId == null)
-                ? "缺少考试计划或考生信息，成绩仅在本地计算，未上传到服务器。"
-                : null;
-        String apiHint = null;
-        if (infoHint == null) {
-            // 构建带用户答案的试卷数据（每题内部包含用户答案）
-            List<Map<String, Object>> questionsWithAnswers = new ArrayList<>();
-            for (QuestionBankWithOptionVO q : questions) {
-                Map<String, Object> qData = new HashMap<>();
-                qData.put("id", q.getId());
-                qData.put("question", q.getQuestion());
-                qData.put("questionType", q.getQuestionType());
-                qData.put("questionTypeName", q.getQuestionTypeName());
-                qData.put("options", q.getOptions());
-                qData.put("attachment", q.getAttachment());
-                qData.put("knowledgeTypeId", q.getKnowledgeTypeId());
-                qData.put("knowledgeTypeName", q.getKnowledgeTypeName());
-                qData.put("knowledgeTypeTopicNumber", q.getKnowledgeTypeTopicNumber());
+        // 构建带用户答案的试卷数据（每题内部包含用户答案）
+        List<Map<String, Object>> questionsWithAnswers = new ArrayList<>();
+        for (QuestionBankWithOptionVO q : questions) {
+            Map<String, Object> qData = new HashMap<>();
+            qData.put("id", q.getId());
+            qData.put("question", q.getQuestion());
+            qData.put("questionType", q.getQuestionType());
+            qData.put("questionTypeName", q.getQuestionTypeName());
+            qData.put("options", q.getOptions());
+            qData.put("attachment", q.getAttachment());
+            qData.put("points", q.getPoints());
+            qData.put("knowledgeTypeId", q.getKnowledgeTypeId());
+            qData.put("knowledgeTypeName", q.getKnowledgeTypeName());
+            qData.put("knowledgeTypeTopicNumber", q.getKnowledgeTypeTopicNumber());
 
-                Set<Long> selected = answers.get(q.getId());
-                if (selected != null && !selected.isEmpty()) {
-                    qData.put("userAnswer", new ArrayList<>(selected));
-                } else {
-                    qData.put("userAnswer", new ArrayList<>());
-                }
-                questionsWithAnswers.add(qData);
+            Set<Long> selected = answers.get(q.getId());
+            if (selected != null && !selected.isEmpty()) {
+                qData.put("userAnswer", new ArrayList<>(selected));
+            } else {
+                qData.put("userAnswer", new ArrayList<>());
             }
-
-            Map<String, Object> paperData = new HashMap<>();
-            paperData.put("questions", questionsWithAnswers);
-            String examPaperJson = new Gson().toJson(paperData);
-
-            ExamRecordReq req = new ExamRecordReq();
-            req.setPlanId(planId);
-            req.setCandidateId(candidateId);
-            req.setRegistrationProgress(3);
-            req.setExamScores(finalScore);
-            req.setReviewStatus(0);
-            req.setExamPaper(examPaperJson);
-            req.setViolationType(0);
-            req.setViolationScreenshots(new ArrayList<>());
-
-            try {
-                boolean success = ApiUtil.submitExamRecord(req);
-                if (!success) {
-                    apiHint = "服务器未确认保存成功，请向监考员核实提交状态。";
-                }
-            } catch (Exception e) {
-                apiHint = "提交考试记录失败：" + e.getMessage();
-            }
+            questionsWithAnswers.add(qData);
         }
 
-        final String hint = infoHint != null ? infoHint : (apiHint != null ? apiHint : null);
-        dispose();
-        SwingUtilities.invokeLater(() -> {
-            ExamEndFrame endFrame = new ExamEndFrame(finalScore, totalScore, hint);
-            endFrame.setVisible(true);
+        Map<String, Object> paperData = new HashMap<>();
+        paperData.put("questions", questionsWithAnswers);
+        String examPaperJson = new Gson().toJson(paperData);
+
+        ExamRecordReq req = new ExamRecordReq();
+        req.setPlanId(planId);
+        req.setCandidateId(candidateId);
+        req.setRegistrationProgress(3);
+        req.setExamScores(finalScore);
+        req.setReviewStatus(0);
+        req.setExamPaper(examPaperJson);
+        req.setViolationType(0);
+        req.setViolationScreenshots(new ArrayList<>());
+
+        JDialog loading = createSubmitLoadingDialog();
+        SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() {
+                if (planId == null || candidateId == null) {
+                    saveExamScoreLocally(userInfo, finalScore);
+                    return null;
+                }
+                try {
+                    boolean success = ApiUtil.submitExamRecord(req);
+                    if (!success) {
+                        saveExamScoreLocally(userInfo, finalScore);
+                    }
+                } catch (Exception e) {
+                    saveExamScoreLocally(userInfo, finalScore);
+                }
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                loading.dispose();
+                showingInternalDialog = false;
+                dispose();
+                ExamEndFrame endFrame = new ExamEndFrame(finalScore, totalScore, null);
+                endFrame.setVisible(true);
+            }
+        };
+        loading.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+                worker.execute();
+            }
         });
+        loading.setVisible(true);
+    }
+
+    private JDialog createSubmitLoadingDialog() {
+        JDialog dialog = new JDialog(this, "正在交卷", true);
+        dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+        dialog.setAlwaysOnTop(true);
+        dialog.setLayout(new BorderLayout());
+
+        JPanel panel = new JPanel(new BorderLayout(0, 18));
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(new EmptyBorder(28, 40, 28, 40));
+
+        JLabel text = new JLabel("正在提交试卷，请稍候...", SwingConstants.CENTER);
+        text.setFont(uiFont(Font.BOLD, 16f));
+        text.setForeground(TEXT_DARK);
+        panel.add(text, BorderLayout.NORTH);
+
+        JProgressBar bar = new JProgressBar();
+        bar.setIndeterminate(true);
+        bar.setBorderPainted(false);
+        bar.setStringPainted(false);
+        bar.setForeground(PRIMARY_BLUE);
+        panel.add(bar, BorderLayout.CENTER);
+
+        JLabel hint = new JLabel("请勿关闭程序，系统会在提交完成后自动显示成绩。", SwingConstants.CENTER);
+        hint.setFont(uiFontPlain(13f));
+        hint.setForeground(TEXT_GRAY);
+        panel.add(hint, BorderLayout.SOUTH);
+
+        dialog.add(panel, BorderLayout.CENTER);
+        dialog.pack();
+        dialog.setMinimumSize(new Dimension(420, dialog.getPreferredSize().height));
+        dialog.setLocationRelativeTo(this);
+        return dialog;
+    }
+
+    private void saveExamScoreLocally(UserInfoVO userInfo, int finalScore) {
+        try {
+            String userHome = System.getProperty("user.home");
+            File dir = new File(userHome, "TEDExamClient" + File.separator + "exam-scores");
+            if (!dir.exists() && !dir.mkdirs()) {
+                System.err.println("本地保存成绩失败：无法创建目录 " + dir.getAbsolutePath());
+                return;
+            }
+
+            String fileName = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".csv";
+            File file = new File(dir, fileName);
+            boolean writeHeader = !file.exists() || file.length() == 0;
+            try (OutputStreamWriter writer = new OutputStreamWriter(
+                    new FileOutputStream(file, true), StandardCharsets.UTF_8)) {
+                if (writeHeader) {
+                    writer.write("考生姓名,身份证,分数\n");
+                }
+                String name = userInfo != null && userInfo.getNickname() != null ? userInfo.getNickname() : "";
+                String idCard = userInfo != null && userInfo.getUsername() != null ? userInfo.getUsername() : "";
+                writer.write(csvValue(name));
+                writer.write(",");
+                writer.write(csvValue(idCard));
+                writer.write(",");
+                writer.write(String.valueOf(finalScore));
+                writer.write("\n");
+            }
+        } catch (Exception e) {
+            System.err.println("本地保存成绩失败：" + e.getMessage());
+        }
+    }
+
+    private String csvValue(String value) {
+        if (value == null) return "";
+        String escaped = value.replace("\"", "\"\"");
+        return "\"" + escaped + "\"";
     }
 
     private int calculateSubmitScore() {
-        int correctCount = 0;
+        int score = 0;
         for (QuestionBankWithOptionVO q : questions) {
             Set<Long> selected = answers.get(q.getId());
             if (selected == null || selected.isEmpty()) continue;
@@ -1286,6 +1369,7 @@ public class ExamFrame extends JFrame {
             List<OptionVO> options = q.getOptions();
             if (options == null) continue;
 
+            int points = q.getPointsOrDefault();
             int qType = q.getQuestionType() != null ? q.getQuestionType() : 0;
 
             if (qType == 0 || qType == 1) {
@@ -1293,7 +1377,7 @@ public class ExamFrame extends JFrame {
                 for (OptionVO opt : options) {
                     if (opt.getId() != null && Boolean.TRUE.equals(opt.getIsCorrectAnswer())
                             && selected.contains(opt.getId())) {
-                        correctCount++;
+                        score += points;
                         break;
                     }
                 }
@@ -1318,12 +1402,12 @@ public class ExamFrame extends JFrame {
                         }
                     }
                     if (allCorrect) {
-                        correctCount++;
+                        score += points;
                     }
                 }
             }
         }
-        return correctCount;
+        return score;
     }
 
     // region 内部组件
